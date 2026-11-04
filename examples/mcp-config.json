@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "brightspace": {
+      "command": "/absolute/path/to/node",
+      "args": ["/absolute/path/to/personal-brightspace-mcp/dist/index.js", "serve"]
+    }
+  }
+}

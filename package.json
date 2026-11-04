@@ -1,0 +1,23 @@
+{
+  "name": "personal-brightspace-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A local, read-only Brightspace MCP server for a personal school tutor.",
+  "type": "module",
+  "bin": { "personal-brightspace-mcp": "dist/index.js" },
+  "engines": { "node": ">=22.16.0" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "start": "node dist/index.js serve",
+    "start:web": "node dist/web/start.js",
+    "login": "node dist/index.js login",
+    "doctor": "node dist/index.js doctor",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "test:built": "node --test tests/*.test.mjs",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "optionalDependencies": { "playwright-core": "^1.57.0" },
+  "devDependencies": { "@types/node": "24.0.4", "typescript": "5.8.3" },
+  "license": "MIT"
+}

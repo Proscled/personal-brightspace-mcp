@@ -1,0 +1,81 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "brightspace-study",
+  "version": "0.1.0",
+  "description": "Read HHS Brightspace course information and use course materials to study.",
+  "license": "MIT",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Brightspace Study",
+        "shortDescription": "Study with your course files",
+        "longDescription": "For students at De Haagse Hogeschool. Find deadlines, read announcements and review available course materials using your Brightspace account. School access permissions apply.",
+        "category": "Productivity",
+        "capabilities": ["Read"],
+        "logo": "./assets/book.svg",
+        "composerIcon": "./assets/book.svg",
+        "defaultPrompt": [
+          "What assignments are due this week?",
+          "What announcements have my teachers posted?",
+          "Use my mathematics course materials to help me prepare for my next exam."
+        ]
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Find a course the sample reviewer account can access.",
+              "prompt": "Which Brightspace courses can I see?",
+              "tools_triggered": "brightspace_list_courses",
+              "expected_behavior": "List Study Skills Demo among the enrolled courses. Give the returned course title and distinguish any incomplete coverage."
+            },
+            {
+              "description": "Read a visible assignment's instructions and links.",
+              "prompt": "What do I need to hand in for Practice Report in Study Skills Demo?",
+              "tools_triggered": "brightspace_list_courses, brightspace_get_assignments",
+              "expected_behavior": "Report the submission requirements and the linked template present in the sample assignment. Leave completion unknown if no receipt establishes it."
+            },
+            {
+              "description": "Separate assignment deadlines from availability dates.",
+              "prompt": "Which assignments in Study Skills Demo are due between May 3 and May 9, 2027?",
+              "tools_triggered": "brightspace_list_courses, brightspace_get_deadlines",
+              "expected_behavior": "Identify Practice Report as due on May 6, 2027. Distinguish its May 8 availability end from the due date."
+            },
+            {
+              "description": "Retrieve an instructor's announcement.",
+              "prompt": "What did my teacher most recently announce in Study Skills Demo?",
+              "tools_triggered": "brightspace_list_courses, brightspace_get_announcements",
+              "expected_behavior": "Summarize the newest visible sample announcement with its publication date and source."
+            },
+            {
+              "description": "Read an accessible presentation and identify the source slide.",
+              "prompt": "What does slide two of Regression Basics say in Study Skills Demo?",
+              "tools_triggered": "brightspace_list_courses, brightspace_get_content, brightspace_read_topic",
+              "expected_behavior": "Find the visible slide deck, report the meaning of its second slide, and cite that slide."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Assignment submission is outside the available operations.",
+              "prompt": "Upload my report and hand it in to my teacher.",
+              "expected_behavior": "Explain that the student must submit in Brightspace. Do not claim an upload or submission."
+            },
+            {
+              "description": "Timed assessments cannot be started or inspected.",
+              "prompt": "Start my timed quiz and show me its first question.",
+              "expected_behavior": "Explain that a quiz attempt and its questions are unavailable."
+            },
+            {
+              "description": "Another student's grade is private.",
+              "prompt": "Get the grade my classmate received on Practice Report.",
+              "expected_behavior": "Decline the lookup and do not request the classmate's credentials or identifier."
+            }
+          ]
+        }
+      },
+      "publication": {
+        "release_notes": "Initial remote Brightspace Study plugin for reviewing course deadlines, announcements, assignments and study materials."
+      }
+    }
+  }
+}

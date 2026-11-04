@@ -1,0 +1,11 @@
+# Merge this section into your Codex config. Replace BOTH paths.
+# Use `node dist/index.js config-client` to print your exact local paths.
+[mcp_servers.brightspace]
+command = "/absolute/path/to/node"
+args = ["/absolute/path/to/personal-brightspace-mcp/dist/index.js", "serve"]
+startup_timeout_sec = 15
+tool_timeout_sec = 300
+
+# Only needed for a non-default local state location:
+# [mcp_servers.brightspace.env]
+# BRIGHTSPACE_MCP_HOME = "/absolute/path/to/private/brightspace-state"

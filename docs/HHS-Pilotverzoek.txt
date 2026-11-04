@@ -1,0 +1,12 @@
+Onderwerp — Vraag over een studiehulp met fictieve cursusgegevens
+
+Beste collega’s van Facilitaire Zaken & IT en Privacy,
+
+Ik studeer Applied Data Science & Artificial Intelligence aan De Haagse Hogeschool. Ik heb een prototype gemaakt waarmee een student vragen kan stellen over opdrachten, deadlines en cursusmateriaal in een chat. Technisch kan de koppeling ook persoonsgegevens lezen, zoals cijfers en feedback. Bij gebruik via ChatGPT of Codex komen de opgevraagde gegevens in de AI-dienst terecht.
+
+Ik lees in artikel 13 lid 5 onder d van het ICT-reglement dat persoonsgegevens en vertrouwelijke informatie van de hogeschool niet in generatieve AI mogen worden gebruikt, ook niet met toestemming. Voor een demonstratie wil ik daarom uitsluitend fictieve studenten en door mijzelf gemaakte lesmaterialen gebruiken.
+
+Is er binnen HHS een geschikte testomgeving of een goedgekeurde manier om zo’n demonstratie te doen? En bij wie kan ik terecht om vast te stellen welke soorten niet-persoonlijk lesmateriaal eventueel voor zo’n toepassing gebruikt mogen worden?
+
+Met vriendelijke groet,
+[Je naam]
