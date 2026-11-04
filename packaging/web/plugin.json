@@ -2,14 +2,14 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "brightspace-study",
   "version": "0.1.0",
-  "description": "Read HHS Brightspace course information and use course materials to study.",
+  "description": "Read Brightspace course information and use course materials to study.",
   "license": "MIT",
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "Brightspace Study",
         "shortDescription": "Study with your course files",
-        "longDescription": "For students at De Haagse Hogeschool. Find deadlines, read announcements and review available course materials using your Brightspace account. School access permissions apply.",
+        "longDescription": "Find deadlines, read announcements and review available course materials using your institution's Brightspace account. School access permissions apply.",
         "category": "Productivity",
         "capabilities": ["Read"],
         "logo": "./assets/book.svg",

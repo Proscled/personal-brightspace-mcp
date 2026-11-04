@@ -4,16 +4,7 @@ A local, read-only **TypeScript MCP server** that gives a school tutor access to
 
 Connect locally with **Claude Desktop, Claude Code or Codex**. [Install](#quick-start-on-your-mac) · [Claude setup](#connect-to-claude) · [Codex setup](#connect-to-codex).
 
-Verified on macOS with an HHS student account on 3 November 2026. Codex retrieved courses, assignments, announcements, structured dates, a course outline and an HTML study topic. The sampled personal submission-receipt request returned HTTP 403. Run `doctor` after signing in to verify identity and enrollments, then check the course tools you plan to use. Each course and resource can have different permissions. See `docs/TEST_REPORT.md` for the checks performed.
-
-## Brightspace Study for ChatGPT in the browser
-
-**Prototype for fictional data.** HHS prohibits using school personal data and confidential information in generative AI, even with individual consent. This also applies to the personal Codex workflow. Use fictitious students and self-authored materials for testing. [HHS ICT Regulations, article 13(5)(d)](https://www.dehaagsehogeschool.nl/media/reglement-ict#page=7)
-
-**Public listing eligibility.** OpenAI excludes plugins that primarily serve as unofficial third-party connectors. The current independent connector appears to fall under that exclusion. The existing name is a working title. D2L prohibits using its trademarks in an app name. OAuth registration alone resolves neither issue. The publication steps below apply only if an eligible, authorized design is established. [OpenAI plugin guidelines](https://developers.openai.com/plugins/plugin-guidelines#third-party-content-and-integrations) · [D2L trademark guidelines](https://www.d2l.com/legal/trademarks/)
-
-- [Set up the hosted service and request school authorization](docs/CHATGPT_WEB.md)
-- [Prepare the ChatGPT plugin and submit it for review](packaging/web/README.md)
+Use your institution's Brightspace URL during setup. The server supports a configurable Brightspace tenant; available APIs and permissions depend on your institution.
 
 ## Quick start on your Mac
 
@@ -42,15 +33,15 @@ On Windows, use PowerShell in the extracted folder: run `npm ci --ignore-scripts
 
 ### Optional school sign-in
 
-Only do this if your institution authorizes the account and material use described above. Use a normal local terminal, not an AI tool call:
+Replace `https://brightspace.example.edu` with your institution's Brightspace URL. Use a normal local terminal, not an AI tool call:
 
 ```bash
-node dist/index.js init --url https://brightspace.hhs.nl
+node dist/index.js init --url https://brightspace.example.edu
 node dist/index.js login
 node dist/index.js doctor
 ```
 
-`login` opens a **separate, temporary Chrome session**. Sign into HHS normally and complete MFA yourself. Open a course, return to the terminal and press Enter. The program collects only school-origin session cookies and any authentication headers the school page itself uses with its own API. It then checks the Brightspace identity endpoint before saving a session. It does not ask for your password, handle MFA codes, scrape your other browser tabs, or save Microsoft/SURF identity-provider cookies.
+`login` opens a **separate, temporary Chrome session**. Sign into your institution normally and complete MFA yourself. Open a course, return to the terminal and press Enter. The program collects only school-origin session cookies and any authentication headers the school page itself uses with its own API. It then checks the Brightspace identity endpoint before saving a session. It does not ask for your password, handle MFA codes, scrape your other browser tabs, or save identity-provider cookies.
 
 To remember browser sign-in between login runs, use `node dist/index.js login --remember-browser`. This opts into a dedicated local Chrome profile, including school and SSO browser state; it never uses your ordinary Chrome profile. The profile is sensitive, stays outside the repository in the private state directory, and is removed by `logout`. School expiry and MFA policies still apply. Successful API reads now save replacement school cookies, when supplied by the server. There is no background refresh or automatic browser launch.
 
@@ -108,7 +99,7 @@ node dist/index.js config-client --client codex
 
 The output is a Codex TOML entry. **Merge it into your existing configuration; do not replace the entire file.** Without `--client`, the command prints both generic JSON and Codex TOML; use only the format your host accepts. Examples are also in `examples/`.
 
-This command connects Codex to your local stdio server. ChatGPT in the browser connects separately to the hosted service described above.
+This command connects Codex to your local stdio server. For optional hosted HTTP setup, see [web deployment](docs/CHATGPT_WEB.md).
 
 ## Try it
 
@@ -116,7 +107,7 @@ In an MCP-connected host:
 
 > What is due in the next 14 days? Separate submission due dates from closing dates, and tell me which sources could not be checked.
 >
-> Read the latest announcements for Wiskunde I and find the preparation for the next exam.
+> Read the latest announcements for my mathematics course and find the preparation for the next exam.
 >
 > Search my imported school snapshot for the assessment matrix, then give me one practice question at a time.
 >
@@ -130,7 +121,7 @@ node dist/index.js call brightspace_get_deadlines '{"daysAhead":14}'
 node dist/index.js call brightspace_get_announcements '{"courseId":"100"}'
 ```
 
-Course IDs in examples are illustrative configuration values for the HHS use case. `list_courses` is the source of truth for your account. A response with `isError` or an incomplete `coverage` entry must not be interpreted as “nothing due.”
+Course IDs in examples are placeholders. `list_courses` is the source of truth for your account. A response with `isError` or an incomplete `coverage` entry must not be interpreted as “nothing due.”
 
 To check for a submission receipt, pass both a course ID and a folder ID from the assignment list to `brightspace_get_assignments`. The ordinary course-wide list makes no receipt requests. A receipt confirms a submission. An empty result leaves completion unknown, particularly for group and on-paper work.
 
@@ -221,7 +212,7 @@ Default state location:
 
 ```json
 {
-  "baseUrl": "https://brightspace.hhs.nl",
+  "baseUrl": "https://brightspace.example.edu",
   "timezone": "Europe/Amsterdam",
   "activeOnly": true,
   "includeCourseIds": [],
@@ -255,8 +246,8 @@ npm run smoke
 
 The core uses Node's standard library and a small, explicitly implemented **stdio MCP protocol subset**, rather than a third-party MCP SDK. This keeps the prebuilt server runnable without npm runtime dependencies. `playwright-core` is optional and loaded only for interactive login. The supported protocol revisions and limitations are documented in `docs/ARCHITECTURE.md`. Migrating the transport to the official SDK is a reasonable future enhancement.
 
-Tests use **synthetic fixtures**. The included `package-lock.json` pins the versions used by `npm ci`. The test report records offline checks separately from authenticated HHS reads.
+Tests use **synthetic fixtures**. The included `package-lock.json` pins the versions used by `npm ci`. The [test report](docs/TEST_REPORT.md) distinguishes offline checks from historical authenticated checks against a specific institution; those checks do not establish compatibility with every institution.
 
 ## Sources and licensing
 
-See `docs/SOURCES.md` for the D2L endpoint documentation, MCP specification, Playwright API and Codex configuration references. This is a new implementation, not a copied fork or an official D2L/HHS product. MIT licensed; see `LICENSE`. Third-party packages retain their own licenses.
+See `docs/SOURCES.md` for the D2L endpoint documentation, MCP specification, Playwright API and host configuration references. This is an independent implementation, not an official D2L product or an institution's official integration. MIT licensed; see `LICENSE`. Third-party packages retain their own licenses.
